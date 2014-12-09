@@ -16,7 +16,7 @@ game.PlayerEntity = me.Entity.extend({
         //create an animation called smallWalk using pictures of the image defined above(mario)
         //sets the animation to run through pictures 8-13 
         //the last number says we switch between pictures every 80 milliseconds
-        this.renderable.addAnimation("smallWalk", [143, 144, 145, 146, 147, 148, 149, 150, ], 80);
+        this.renderable.addAnimation("smallWalk", [143, 144, 145, 146, 147, 148, 149, 150], 80);
 
         this.renderable.setCurrentAnimation("idle");
 
@@ -61,13 +61,22 @@ game.PlayerEntity = me.Entity.extend({
         this._super(me.Entity, "update", [delta]);
         return true;
     },
-    collideHandler: function(response) {
-
+    collideHandler: function (response){
+        var ydif = this.pos.y - response.b.pos.y;
+        console.log(ydif);
+        
+        if(response.b.type === 'badguy'){
+            if(ydif <= -50){
+                response.b.alive = false;
+            }else if (response.b.alive){
+            me.state.change(me.state.MENU);
+            }
+        }
     }
 
-
-
 });
+
+
 
 
 game.LevelTrigger = me.Entity.extend({
@@ -109,7 +118,7 @@ game.BadGuy = me.Entity.extend({
         this.startX  = x;
         this.endX = x + width - this.spritewidth;
         this.pos.x = x + width -this.spritewidth;
-        this.updateBound();
+        this.updateBounds();
         
         this.alwaysUpdate = true;
         
@@ -117,11 +126,35 @@ game.BadGuy = me.Entity.extend({
         this.alive = true;
         this.type = "badguy";
         
-//        this.renderable.addAnimation("run", )
+        //this.renderable.addAnimation("run", [0, 1, 2]) 80);
+        //this.renderable.setCurrentAnimation("run");
         
+        this.body.setVelocity(4, 6);
     },
     
     update: function(delta){
+        this.body.update(delta);
+        me.collision.check(this, true, this.collideHandler.bind(this), true);
+        
+        if(this.alive){
+            if(this.walkLeft && this.pos.x <= this.startX){
+                this.walkLeft = false;
+            }else if(!this.walkLeft && this.pos.x >= this.endX){
+                this.walkLeft = true; 
+            }
+            this.flipX(!this.walkLeft);
+            this.body.vel.x += (this.walkLeft) ? -this.body.accel.x * me.timer.tick :this.body.accel.x * me.timer.tick;
+            
+        }else{
+            me.game.world.removeChild(this);
+        }
+        
+        
+        this._super(me.Entity, "update", [delta]);
+        return true;
+    },
+    
+    collideHandler: function(){
         
     }
     

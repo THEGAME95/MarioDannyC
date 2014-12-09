@@ -25,6 +25,7 @@ game.resources = [
         {name: "DanielLevel01", type: "tmx", src: "data/map/DanielLevel01.tmx"},
         {name: "DanielLevel02", type: "tmx", src: "data/map/DanielLevel02.tmx"},
         {name: "DanielLevel03", type: "tmx", src: "data/map/DanielLevel03.tmx"},
+        {name: "DanielLevel04", type: "tmx", src: "data/map/DanielLevel04.tmx"},  
    
 	/* Background music. 
 	 * @example
