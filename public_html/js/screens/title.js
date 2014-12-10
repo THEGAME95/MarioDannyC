@@ -13,7 +13,7 @@ game.TitleScreen = me.ScreenObject.extend({
                     },
                     
                     draw: function(renderer){
-                        this.font.draw(renderer.getContext(), "BATMAN", 450, 130);
+                        this.font.draw(renderer.getContext(), "BATMAN ARKHAM CITY", 450, 130);
                         this.font.draw(renderer.getContext(), "Press ENTER to play!", 250, 530);
                     }
                     
